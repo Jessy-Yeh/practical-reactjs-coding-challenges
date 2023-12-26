@@ -8,13 +8,17 @@ import TextArea from './components/TextArea'
 
 const App = () => {
   const [numberOfCharacters, setNumberOfCharacters] = useState(0)
+  const [numberOfWords, setNumberOfWords] = useState(0)
   return (
     <>
       <Navbar />
       <div className="small-container">
         <div className="main-app">
-          <ResultBox numberOfCharacters={numberOfCharacters} />
-          <TextArea setNumberOfCharacters={setNumberOfCharacters} />
+          <ResultBox numberOfCharacters={numberOfCharacters} numberOfWords={numberOfWords} />
+          <TextArea
+            setNumberOfCharacters={setNumberOfCharacters}
+            setNumberOfWords={setNumberOfWords}
+          />
           <BottomResultBox />
         </div>
       </div>
