@@ -3,9 +3,10 @@ import './index.scss'
 interface Props {
   numberOfCharacters: number
   numberOfWords: number
+  numberOfSentences: number
 }
 
-const ResultBox = ({ numberOfCharacters, numberOfWords }: Props) => {
+const ResultBox = ({ numberOfCharacters, numberOfWords, numberOfSentences }: Props) => {
   const resultBar = [
     {
       title: 'Words',
@@ -17,7 +18,7 @@ const ResultBox = ({ numberOfCharacters, numberOfWords }: Props) => {
     },
     {
       title: 'Sentences',
-      value: 0,
+      value: `${numberOfSentences}`,
     },
     {
       title: 'Paragraphs ',
