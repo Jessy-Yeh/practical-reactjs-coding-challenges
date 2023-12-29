@@ -13,10 +13,70 @@ import './index.css'
 
 const PasswordGenerator = () => {
   const [passwordLength, setPasswordLength] = useState<number>(10)
+  const [password, setPassword] = useState('')
+  const [copied, setCopied] = useState(false)
 
-  const onChangePasswordLength = (value: any) => {
+  const [uppercaseChecked, setUppercaseChecked] = useState(true)
+  const [lowercaseChecked, setLowercaseChecked] = useState(false)
+  const [numbersChecked, setNumbersChecked] = useState(false)
+  const [specialCharsChecked, setSpecialCharsChecked] = useState(true)
+
+  const handleUppercaseChange = () => {
+    setUppercaseChecked((prev) => !prev)
+  }
+
+  const handleLowercaseChange = () => {
+    setLowercaseChecked((prev) => !prev)
+    if (!uppercaseChecked && !numbersChecked && !specialCharsChecked) {
+      setLowercaseChecked(true)
+    }
+  }
+
+  const handleNumbersChange = () => {
+    setNumbersChecked((prev) => !prev)
+  }
+
+  const handleSpecialCharsChange = () => {
+    setSpecialCharsChecked((prev) => !prev)
+  }
+
+  const onChangePasswordLength = (value: number) => {
     setPasswordLength(value)
   }
+
+  const generatePassword = () => {
+    const upperLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    const lowerLetters = 'abcdefghijklmnopqrstuvwxyz'
+    const specialChars = '!@#$%^&*()_+{}|:<>?'
+    const numbers = '0123456789'
+
+    let charset = ''
+
+    if (uppercaseChecked) {
+      charset += upperLetters
+    }
+    if (lowercaseChecked) {
+      charset += lowerLetters
+    }
+    if (specialCharsChecked) {
+      charset += specialChars
+    }
+    if (numbersChecked) {
+      charset += numbers
+    }
+
+    let generatedPassword = ''
+
+    for (let i = 0; i < passwordLength; i++) {
+      generatedPassword += charset.charAt(Math.floor(Math.random() * charset.length))
+    }
+
+    setPassword(generatedPassword)
+  }
+
+  useEffect(() => {
+    generatePassword()
+  }, [])
 
   return (
     <div className="password-wrapper">
@@ -31,13 +91,15 @@ const PasswordGenerator = () => {
       </div>
       <div className="password-input-wrapper">
         <div className="password-field">
-          <input type="text" placeholder="your password" value="B9QI4PDBYY" />
-          <img src={refreshIcon} alt="refresh the password" />
+          <input type="text" placeholder="your password" value={password} />
+          <img src={refreshIcon} alt="refresh the password" onClick={generatePassword} />
         </div>
-        <button className="copy-btn">
-          <img src={copyIcon} alt="copy password" />
-          Copy
-        </button>
+        <CopyToClipboard text={password} onCopy={() => setCopied(true)}>
+          <button className="copy-btn">
+            <img src={copyIcon} alt="copy password" />
+            Copy
+          </button>
+        </CopyToClipboard>
       </div>
       <span className="fw-500">Weak</span>
       <div className="slider">
@@ -54,14 +116,33 @@ const PasswordGenerator = () => {
         />
       </div>
       <div className="elements">
-        <Checkbox id="uppercase" label="Uppercase" checked={true} name="upper" />
-        <Checkbox id="lowercase" label="Lowercase" checked={false} name="lower" />
-        <Checkbox id="numbers" label="Numbers" checked={false} name="numbers" />
+        <Checkbox
+          id="uppercase"
+          label="Uppercase"
+          checked={uppercaseChecked}
+          name="upper"
+          onChange={handleUppercaseChange}
+        />
+        <Checkbox
+          id="lowercase"
+          label="Lowercase"
+          checked={lowercaseChecked}
+          name="lower"
+          onChange={handleLowercaseChange}
+        />
+        <Checkbox
+          id="numbers"
+          label="Numbers"
+          checked={numbersChecked}
+          name="numbers"
+          onChange={handleNumbersChange}
+        />
         <Checkbox
           id="special chars"
           label="Special Characters"
-          checked={true}
+          checked={specialCharsChecked}
           name="specialChars"
+          onChange={handleSpecialCharsChange}
         />
       </div>
     </div>
